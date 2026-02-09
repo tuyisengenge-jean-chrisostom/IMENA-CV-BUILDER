@@ -1,4 +1,4 @@
- <!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -13,38 +13,30 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "IMENA CV BUILDER",
-    "alternateName": "Free CV Builder Online",
-    "description": "IMENA CV BUILDER - Free online CV builder with professional template - download as PDF instantly",
+    "name": "Modern CV Builder",
+    "description": "Free online CV builder with professional template - download as PDF instantly",
     "url": "https://moderncvbuilderweb.netlify.app",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Any",
-    "image": "https://i.postimg.cc/s2v4WS2K/logo.png",
     "offers": {
       "@type": "Offer",
       "price": "0",
       "priceCurrency": "USD"
-    },
-    "author": {
-      "@type": "Person",
-      "name": "TUYISENGE Jean Chrisostom"
     }
   }
   </script>
 
   <!-- 🌐 OPEN GRAPH TAGS -->
-  <meta property="og:title" content="IMENA CV BUILDER - Free CV Builder 2025 - Download Professional Resume PDF">
-  <meta property="og:description" content="IMENA CV BUILDER: Fill our professional CV template and download as PDF instantly. Completely free, no signup required.">
+  <meta property="og:title" content="Free CV Builder 2025 - Download Professional Resume PDF">
+  <meta property="og:description" content="Fill our professional CV template and download as PDF instantly. Completely free, no signup required.">
   <meta property="og:url" content="https://moderncvbuilderweb.netlify.app/">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://i.postimg.cc/s2v4WS2K/logo.png">
 
   <!-- 🔗 CANONICAL URL -->
   <link rel="canonical" href="https://moderncvbuilderweb.netlify.app/">
 
-  <!-- ✅ FAVICON & LOGO -->
-  <link rel="icon" type="image/png" href="https://i.postimg.cc/s2v4WS2K/logo.png">
-  <link rel="apple-touch-icon" href="https://i.postimg.cc/s2v4WS2K/logo.png">
+  <!-- ✅ FAVICON (Fix the filename) -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 
   <!-- ✅ KEEP YOUR EXISTING STYLES & SCRIPTS -->
   <link rel="stylesheet" href="index.css">
@@ -163,7 +155,7 @@
         addReference: 'Add Reference',
         // Buttons
         downloadPdf: 'Download PDF',
-        exportWord: 'Export to Word',
+        exportCsv: 'Export CSV',
         livePreview: 'Live Preview',
         // CV Preview
         professionalObjective: 'Professional Objective',
@@ -173,7 +165,7 @@
         supabaseUnavailable: 'Supabase unavailable — submission skipped.',
         submissionSaved: 'Submission saved.',
         cvDownloaded: 'CV downloaded successfully!',
-        dataExported: 'CV exported to Word document',
+        dataExported: 'Data exported as CSV',
         unexpectedError: 'Unexpected error. Check console.',
       },
       fr: {
@@ -259,7 +251,7 @@
         addReference: 'Ajouter une Référence',
         // Buttons
         downloadPdf: 'Télécharger PDF',
-        exportWord: 'Exporter en Word',
+        exportCsv: 'Exporter CSV',
         livePreview: 'Aperçu en Direct',
         // CV Preview
         professionalObjective: 'Objectif Professionnel',
@@ -269,7 +261,7 @@
         supabaseUnavailable: 'Supabase indisponible — soumission ignorée.',
         submissionSaved: 'Soumission enregistrée.',
         cvDownloaded: 'CV téléchargé avec succès!',
-        dataExported: 'CV exporté en document Word',
+        dataExported: 'Données exportées en CSV',
         unexpectedError: 'Erreur inattendue. Consultez la console.',
       },
       rw: {
@@ -355,7 +347,7 @@
         addReference: 'Ongeraho Icyiyerekano',
         // Buttons
         downloadPdf: 'Pakura PDF',
-        exportWord: 'Kohereza muri Word',
+        exportCsv: 'Kohereza CSV',
         livePreview: 'Kureba Ako Kanya',
         // CV Preview
         professionalObjective: 'Intego z\'Umwuga',
@@ -365,7 +357,7 @@
         supabaseUnavailable: 'Supabase ntiboneka — kohereza byaretswe.',
         submissionSaved: 'Kohereza byabitswe.',
         cvDownloaded: 'CV yapakuruwe neza!',
-        dataExported: 'CV yoherejwe mukirango cy Word',
+        dataExported: 'Amakuru yoherejwe muri CSV',
         unexpectedError: 'Ikosa ritunguranye. Reba console.',
       }
     };
@@ -516,7 +508,7 @@
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">{t('landingTitle')}</h1>
             <p className="text-lg md:text-xl mb-8 text-white opacity-90 max-w-2xl mx-auto">{t('landingMotto')}</p>
-            <button onClick={onStart} className="px-8 py-4 text-lg font-semibold bg-white text-purple-600 rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300"> {t('startBuilding')} </button>
+            <button onClick={onStart} className="px-8 py-4 text-lg font-semibold bg-white text-purple-600 rounded-xl shadow-2xl"> {t('startBuilding')} </button>
           </div>
         </div>
       );
@@ -1032,32 +1024,20 @@
                     ⬇️ {t('downloadPdf')}
                   </button>
                   <button onClick={() => {
-                    // Word export using html2canvas + jsPDF
-                    const element = document.getElementById('cv-preview');
-                    if (!element) {
-                      showToast('Preview not available');
-                      return;
-                    }
-                    html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
-                      const imgData = canvas.toDataURL('image/png');
-                      const pdf = new jsPDF.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-                      const pdfWidth = pdf.internal.pageSize.getWidth();
-                      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                      let heightLeft = pdfHeight;
-                      let position = 0;
-                      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
-                      heightLeft -= pdf.internal.pageSize.getHeight();
-                      while (heightLeft >= 0) {
-                        position = heightLeft - pdfHeight;
-                        pdf.addPage();
-                        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
-                        heightLeft -= pdf.internal.pageSize.getHeight();
-                      }
-                      pdf.save(`${(cvData.personalInfo.fullName||'CV').replace(/\s+/g,'_')}.docx`);
-                      showToast(t('dataExported'));
-                    });
+                    // quick CSV export of main fields
+                    const csv = [
+                      [t('fullName'), cvData.personalInfo.fullName || ''],
+                      [t('email'), cvData.personalInfo.email || ''],
+                      [t('phone'), cvData.personalInfo.phone || ''],
+                      [t('location'), cvData.personalInfo.location || ''],
+                      [t('professionalSummary'), cvData.professionalSummary || '']
+                    ].map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+                    const blob = new Blob([csv], { type: 'text/csv' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a'); a.href = url; a.download = `${(cvData.personalInfo.fullName||'CV').replace(/\s+/g,'_')}_data.csv`; a.click(); URL.revokeObjectURL(url);
+                    showToast(t('dataExported'));
                   }} className="flex-1 px-6 py-3 border-2 border-white/30 hover:bg-white/10 rounded-lg font-semibold text-white">
-                    📄 {t('exportWord')}
+                    📊 {t('exportCsv')}
                   </button>
                 </div>
               </div>
@@ -1125,343 +1105,6 @@
       root.render(<App />);
     } else {
       console.error('ReactDOM.createRoot not available');
-    }
-
-    /* ==================== ADVANCED INTERACTIVE EFFECTS SYSTEM ==================== */
-    
-    // Particle System with Cursor Interaction
-    class ParticleSystem {
-      constructor() {
-        this.particles = [];
-        this.mouseX = window.innerWidth / 2;
-        this.mouseY = window.innerHeight / 2;
-        this.container = null;
-        this.isEnabled = !this.shouldReduceMotion();
-        this.init();
-      }
-
-      shouldReduceMotion() {
-        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      }
-
-      init() {
-        if (!this.isEnabled) return;
-        
-        // Create particle container
-        this.container = document.createElement('div');
-        this.container.className = 'particle-container';
-        document.body.insertBefore(this.container, document.body.firstChild);
-
-        // Create initial particles
-        const particleCount = window.innerWidth > 768 ? 50 : 20;
-        for (let i = 0; i < particleCount; i++) {
-          this.createParticle();
-        }
-
-        // Setup event listeners
-        document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-        window.addEventListener('resize', () => this.handleResize());
-
-        // Animation loop
-        this.animate();
-      }
-
-      createParticle() {
-        const particle = {
-          x: Math.random() * window.innerWidth,
-          y: Math.random() * window.innerHeight,
-          vx: (Math.random() - 0.5) * 2,
-          vy: (Math.random() - 0.5) * 2,
-          radius: Math.random() * 1.5 + 0.5,
-          color: ['rgba(79,172,254,0.6)', 'rgba(168,85,247,0.6)', 'rgba(236,72,153,0.6)'][Math.floor(Math.random() * 3)],
-          element: null
-        };
-
-        // Create DOM element
-        const el = document.createElement('div');
-        el.className = 'particle';
-        el.style.cssText = `
-          width: ${particle.radius * 2}px;
-          height: ${particle.radius * 2}px;
-          background: ${particle.color};
-          box-shadow: 0 0 10px ${particle.color};
-          left: ${particle.x}px;
-          top: ${particle.y}px;
-        `;
-        this.container?.appendChild(el);
-        particle.element = el;
-
-        this.particles.push(particle);
-      }
-
-      handleMouseMove(e) {
-        this.mouseX = e.clientX;
-        this.mouseY = e.clientY;
-
-        // Repel particles from cursor
-        this.particles.forEach(p => {
-          const dx = p.x - this.mouseX;
-          const dy = p.y - this.mouseY;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          const minDistance = 150;
-
-          if (distance < minDistance) {
-            const angle = Math.atan2(dy, dx);
-            const strength = (1 - distance / minDistance) * 3;
-            p.vx += Math.cos(angle) * strength;
-            p.vy += Math.sin(angle) * strength;
-          }
-        });
-      }
-
-      handleResize() {
-        if (this.particles.length > 0 && Math.random() > 0.9) {
-          const p = this.particles[Math.floor(Math.random() * this.particles.length)];
-          p.x = Math.random() * window.innerWidth;
-          p.y = Math.random() * window.innerHeight;
-        }
-      }
-
-      animate() {
-        if (!this.isEnabled) return;
-
-        this.particles.forEach((p, i) => {
-          // Apply physics
-          p.vx *= 0.98;
-          p.vy *= 0.98;
-          p.x += p.vx;
-          p.y += p.vy;
-
-          // Bounce off walls
-          if (p.x - p.radius < 0 || p.x + p.radius > window.innerWidth) p.vx *= -1;
-          if (p.y - p.radius < 0 || p.y + p.radius > window.innerHeight) p.vy *= -1;
-
-          // Keep in bounds
-          p.x = Math.max(p.radius, Math.min(window.innerWidth - p.radius, p.x));
-          p.y = Math.max(p.radius, Math.min(window.innerHeight - p.radius, p.y));
-
-          // Update DOM
-          if (p.element) {
-            p.element.style.transform = `translate3d(${p.x - p.radius}px, ${p.y - p.radius}px, 0)`;
-          }
-
-          // Connect nearby particles
-          if (i < this.particles.length - 1) {
-            for (let j = i + 1; j < this.particles.length; j++) {
-              const p2 = this.particles[j];
-              const dx = p2.x - p.x;
-              const dy = p2.y - p.y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-
-              if (dist < 150) {
-                const line = document.createElement('div');
-                line.style.cssText = `
-                  position: absolute;
-                  width: ${dist}px;
-                  height: 1px;
-                  background: linear-gradient(90deg, ${p.color}, ${p2.color});
-                  opacity: ${0.3 * (1 - dist / 150)};
-                  left: ${p.x}px;
-                  top: ${p.y}px;
-                  transform: rotate(${Math.atan2(dy, dx)}rad);
-                  pointer-events: none;
-                `;
-                this.container?.appendChild(line);
-              }
-            }
-          }
-        });
-
-        requestAnimationFrame(() => this.animate());
-      }
-    }
-
-    // Binary Rain Effect
-    class BinaryRain {
-      constructor() {
-        this.container = null;
-        this.isEnabled = !this.shouldReduceMotion() && window.innerWidth > 768;
-        this.init();
-      }
-
-      shouldReduceMotion() {
-        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      }
-
-      init() {
-        if (!this.isEnabled) return;
-
-        this.container = document.createElement('div');
-        this.container.className = 'binary-rain';
-        document.body.appendChild(this.container);
-
-        const columnCount = Math.floor(window.innerWidth / 30);
-        for (let i = 0; i < columnCount; i++) {
-          this.createColumn(i);
-        }
-      }
-
-      createColumn(index) {
-        const duration = 8 + Math.random() * 12;
-        const delay = Math.random() * 5;
-        const digits = Array(20).fill(0).map(() => Math.random() > 0.5 ? '0' : '1').join('');
-
-        const span = document.createElement('span');
-        span.className = 'binary-digit';
-        span.textContent = digits;
-        span.style.cssText = `
-          left: ${index * 30}px;
-          animation: binaryFall ${duration}s linear ${delay}s infinite;
-        `;
-
-        this.container?.appendChild(span);
-      }
-    }
-
-    // Floating Icons System
-    class FloatingIcons {
-      constructor() {
-        this.icons = ['📄', '💼', '🎓', '🌟'];
-        this.container = null;
-        this.isEnabled = window.innerWidth > 1024;
-        this.init();
-      }
-
-      init() {
-        if (!this.isEnabled) return;
-
-        this.container = document.createElement('div');
-        this.container.style.cssText = 'position:fixed; inset:0; pointer-events:none; z-index:2;';
-        document.body.appendChild(this.container);
-
-        this.icons.forEach((icon, i) => {
-          const el = document.createElement('div');
-          el.className = 'floating-icon';
-          el.textContent = icon;
-          const randomX = Math.random() * (window.innerWidth - 100) + 50;
-          const randomY = Math.random() * (window.innerHeight - 100) + 50;
-          el.style.cssText = `left:${randomX}px; top:${randomY}px;`;
-          this.container?.appendChild(el);
-        });
-      }
-    }
-
-    // Button Ripple Effect
-    function initButtonRipples() {
-      const buttons = document.querySelectorAll('button');
-      buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-          const rect = this.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-
-          const ripple = document.createElement('span');
-          ripple.style.cssText = `
-            position: absolute;
-            left: ${x}px;
-            top: ${y}px;
-            width: 20px;
-            height: 20px;
-            background: rgba(255,255,255,0.6);
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple 0.6s ease-out;
-            pointer-events: none;
-          `;
-          this.appendChild(ripple);
-
-          setTimeout(() => ripple.remove(), 600);
-        });
-      });
-    }
-
-    // Circuit Board Pattern Generator
-    class CircuitBoard {
-      constructor() {
-        this.svg = null;
-        this.isEnabled = window.innerWidth > 768;
-        this.init();
-      }
-
-      init() {
-        if (!this.isEnabled) return;
-
-        this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        this.svg.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
-        this.svg.setAttribute('width', window.innerWidth);
-        this.svg.setAttribute('height', window.innerHeight);
-        this.svg.style.cssText = `
-          position: fixed;
-          top: 0;
-          left: 0;
-          pointer-events: none;
-          z-index: 1;
-          opacity: 0.08;
-        `;
-
-        // Draw circuit lines
-        for (let i = 0; i < 5; i++) {
-          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-          line.setAttribute('x1', Math.random() * window.innerWidth);
-          line.setAttribute('y1', Math.random() * window.innerHeight);
-          line.setAttribute('x2', Math.random() * window.innerWidth);
-          line.setAttribute('y2', Math.random() * window.innerHeight);
-          line.setAttribute('stroke', 'rgba(79,172,254,0.6)');
-          line.setAttribute('stroke-width', '2');
-          line.setAttribute('stroke-dasharray', '10,5');
-          line.style.animation = `electricPulse 4s ease-in-out infinite`;
-          this.svg.appendChild(line);
-        }
-
-        document.body.insertBefore(this.svg, document.body.firstChild);
-      }
-    }
-
-    // Cursor Trail Effect
-    class CursorTrail {
-      constructor() {
-        this.trail = [];
-        this.maxLength = 10;
-        this.isEnabled = window.innerWidth > 768;
-        if (this.isEnabled) {
-          document.addEventListener('mousemove', (e) => this.updateTrail(e));
-        }
-      }
-
-      updateTrail(e) {
-        const point = { x: e.clientX, y: e.clientY, life: 1 };
-        this.trail.push(point);
-
-        if (this.trail.length > this.maxLength) {
-          this.trail.shift();
-        }
-      }
-    }
-
-    // Initialize all systems
-    function initializeEffects() {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        console.log('Reduced motion detected - animations disabled');
-        return;
-      }
-
-      try {
-        new ParticleSystem();
-        new BinaryRain();
-        new FloatingIcons();
-        new CircuitBoard();
-        new CursorTrail();
-        initButtonRipples();
-      } catch (error) {
-        console.warn('Effects initialization:', error);
-      }
-    }
-
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initializeEffects);
-    } else {
-      initializeEffects();
     }
   })();
   </script>
